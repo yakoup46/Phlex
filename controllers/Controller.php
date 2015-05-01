@@ -1,6 +1,6 @@
 <?php
 
-class Controller {
+class Controller extends Database{
 
     private $class;
 
@@ -12,7 +12,11 @@ class Controller {
             exit('Invalid File Name');
         }
 
-        echo file_get_contents($file);
-    }
+        ob_start();
+        include $file;
+        $output = ob_get_contents();
+        ob_end_clean();
 
+        echo $output;
+    }
 }

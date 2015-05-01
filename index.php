@@ -1,6 +1,7 @@
 <?php
 
 require_once 'config.php';
+require_once 'settings.php';
 require_once 'constants.php';
 
 $parts = array_filter(explode('/', URL));

@@ -1,1 +1,3 @@
-home.php
+<?php
+var_dump($this->users);
+?>
