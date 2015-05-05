@@ -1,6 +1,6 @@
 <?php
 
-class Database {
+class Database extends ModelInterface {
 
     private $host = DB_HOST;
     private $user = DB_USER;
@@ -16,10 +16,15 @@ class Database {
         $this->db = $this;
     }
 
-    public function find($table) {
-        $this->select('*')->from($table)->where('1=1');
+    public function find($model, $columns = null) {
+        if (is_null($columns)) {
+            $class = $this->getClass($model);
+            $columns = $this->getColumns($class);
+        }
+
+        $this->select($columns)->from($model)->where('1=1');
         $data = $this->conn->query($this->getQuery());
-        $this->{$table} = $this->buildResults($data);
+        $this->{$model} = $this->buildResults($data);
     }
 
     public function select($columns) {
@@ -52,5 +57,11 @@ class Database {
         }
 
         return $array;
+    }
+
+    private function getClass($model) {
+        $model = substr(ucfirst($model), 0, strlen($model) - 1);
+
+        return new $model;
     }
 }
