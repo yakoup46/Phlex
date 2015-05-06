@@ -16,9 +16,17 @@ class Database extends ModelInterface {
         $this->db = $this;
     }
 
+
+    // Clean this method up!
     public function find($model, $columns = null) {
         if (is_null($columns)) {
             $class = $this->getClass($model);
+
+            if (!$class) {
+                $this->{$model} = 'Table ' . $model . ' does not exist';
+                return false;
+            }
+
             $columns = $this->getColumns($class);
         }
 
@@ -60,6 +68,12 @@ class Database extends ModelInterface {
     }
 
     private function getClass($model) {
+        $table = $this->conn->query("SHOW TABLES LIKE '$model'");
+
+        if (empty($table->fetch_all())) {
+            return false;
+        }
+
         $model = substr(ucfirst($model), 0, strlen($model) - 1);
 
         return new $model;
