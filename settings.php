@@ -4,6 +4,6 @@
 
 $host = '127.0.0.1';
 $user = 'root';
-$pass = 'root';
+$pass = '';
 $dbname = 'Phlex';
 $port = '3306';

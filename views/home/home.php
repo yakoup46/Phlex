@@ -1,3 +1,1 @@
-<?php
-    var_dump($this->users);
-?>
+<h4>my content</h4>

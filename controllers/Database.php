@@ -12,7 +12,12 @@ class Database extends ModelInterface {
     protected $db;
 
     public function __construct($db_config = null) {
-        $this->conn = mysqli_connect($this->host, $this->user, $this->pass, $this->name, $this->port);
+        $this->conn = new mysqli($this->host, $this->user, $this->pass, $this->name, $this->port);
+        
+        if (!$this->conn || mysqli_connect_errno()) {
+            exit(mysqli_connect_error());
+        }
+
         $this->db = $this;
     }
 
