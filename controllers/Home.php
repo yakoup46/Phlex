@@ -3,7 +3,7 @@
 class Home extends Controller {
 
     public function index() {
-        $this->template('basic')->load('home');
+        $this->load('home', 'basic');
     }
 
 }

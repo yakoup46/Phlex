@@ -1,38 +1,38 @@
 <?php
 
-class Controller extends Database{
+class Controller extends Database {
 
     private $class;
+    private $dir;
 
-    private $template = false;
-
-    public function load($view) {
+    public function load($view, $template = false) {
+        $this->dir = getcwd();
         $this->class = strtolower(get_class($this));
-        $file = implode('/', array(__DIR__, '../views', $this->class, $view . '.php'));
 
-        if (!file_exists($file)) {
-            exit('Invalid File Name');
-        }
-
-        ob_start();
-
-        if ($this->template !== false) {
-            include __DIR__ . '/../templates/' . $this->template . '/header.php';
-            include $file;
-            include __DIR__ . '/../templates/' . $this->template . '/footer.php';
+        if ($template !== false) {
+            $this->massInclude(
+                array('templates', $template, 'header.php'),
+                array('views', $this->class, $view . '.php'),
+                array('templates', $template, 'footer.php')
+            );
         } else {
-            include $file;
+            $this->massInclude(array('views', $this->class, $view . '.php'));
         }
-        
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        echo $output;
     }
 
-    public function template($template) {
-        $this->template = $template;
+    private function massInclude() {
+        foreach(func_get_args() as $parts) {
+            include $this->buildUrl($parts);
+        }
+    }
 
-        return $this;
+    private function buildUrl($parts) {
+        $file = implode('/', $parts);
+
+        if (!file_exists($file)) {
+            exit('Invalid File Name: ' . $parts[count($parts)]);
+        }
+
+        return $file;
     }
 }
